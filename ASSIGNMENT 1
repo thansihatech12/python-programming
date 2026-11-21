@@ -1,1 +1,19 @@
+Task 12 – Seasonal Rate Changes
+The assignment describes seasonal changes: base rate Rs. 32.00, fat adjustment Rs. 0.45 per 0.1%, and a Rs. 0.50/L bonus when ten-day quantity is greater than 500 L. The SNF adjustment should remain Rs. 0.30 per 0.1% only if confirmed by the co-operative. Use Decimal for money and explicit rounding for measurements reported to two decimal places.
+from decimal import Decimal, ROUND_HALF_UP
+BASE = Decimal("32.00")
+FAT_STEP = Decimal("0.45")
+SNF_STEP = Decimal("0.30")  # confirm this value
+BONUS_LIMIT = Decimal("500")
+BONUS = Decimal("0.50")
 
+def seasonal_rate(fat, snf):
+    fat_steps = ((Decimal(str(fat)) - Decimal("3.5")) / Decimal("0.1")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    snf_steps = ((Decimal(str(snf)) - Decimal("8.5")) / Decimal("0.1")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    return (BASE + fat_steps * FAT_STEP + snf_steps * SNF_STEP).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+def seasonal_payment(ten_day_litres, rate):
+    litres = Decimal(str(ten_day_litres))
+    bonus = BONUS if litres > BONUS_LIMIT else Decimal("0.00")
+    return (litres * (rate + bonus)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+At standard fat and SNF, the seasonal rate is Rs. 32.00/L. Exactly 500 L earns no bonus, so payment is Rs. 16,000.00. At 501 L, the bonus applies: Rs. 32.50/L, giving Rs. 16,282.50. Test 500 L and 501 L explicitly. The overall structure remains the same; only the rate constants, rounding and bonus rule change.
