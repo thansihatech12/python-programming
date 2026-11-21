@@ -1,1 +1,19 @@
+def naive(n):
 
+global calls; calls += 1
+
+if n <= 1: return 1
+
+return naive(n 1) + naive(n - 2)
+
+def
+
+dp(n):
+
+ops = 0; a, b = 1, 1
+
+for in range(n 1):
+
+a, b = b, a + b; ops += 1
+
+return b, ops
